@@ -146,7 +146,7 @@
             filterItems.forEach(item => {
                 item.addEventListener('click', function () {
                     selectedCategory = this.dataset.category;
-                    filterButton.innerHTML = `<i class="fas fa-filter"></i> ${this.textContent.trim()}`;
+                    filterButton.innerHTML = `<i class="fas fa-filter"></i>`;
                     updateTable();
                 });
             });

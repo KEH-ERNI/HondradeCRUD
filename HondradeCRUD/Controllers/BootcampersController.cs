@@ -75,7 +75,7 @@ namespace HondradeCRUD.Controllers
             context.Bootcampers.Add(bootcamper);
             context.SaveChanges();
 
-            TempData["SuccessMessage"] = "Bootcamp created successfully.";
+            TempData["SuccessMessage"] = "Bootcamper created successfully.";
             return RedirectToAction("Index", "Bootcampers");
         }
 
