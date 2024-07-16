@@ -9,52 +9,52 @@
               <h1 style="color: #233770; font-weight: bold">BOOTCAMP TRAINEES</h1>
               <div>Meet the learners in ERNIAcademy.</div>
           </div>
-           <div class="col-4">
-              <img src="~/images/logo.png" width="70"/>
-          </div>
+            <div class="col-4 d-flex justify-content-end align-items-end">
+                <img src="~/images/logo.png" width="70" class="img-fluid" />
+            </div>
         </div>
-    </div
+    </div>
 
     <div></div>
 
-    <div class="container p-3">
-        <div class="mb-3 ">
-            <button type="button" class="btn w-100 py-2 text-white" style="background-color: #03367E" asp-controller="Bootcampers" asp-action="Create">
-                <i class="fa-solid fa-plus"></i> <span>ADD BOOTCAMPER</span>
-            </button>
-        </div>
-
-        <div class="row px-0 gap-0 container col-12 align-items-center justify-content-center mb-3">
-            <div class="col-10">
+       <div class="container p-3">
+        <div class="row align-items-center justify-content-between mb-3 gap-0">
+            <div class="col-lg-8 col-10">
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text p-3"><i class="fa-solid fa-magnifying-glass"></i></span>
                     </div>
-                    <input type="text" class="form-control" id="search" placeholder="Search by name..." />
+                    <input type="text" class="form-control" id="search" placeholder="Search by name...">
                 </div>
             </div>
-            <div class="col-2 align-content-center">
+            <div class="col-lg-auto col-2">
                 <div class="dropdown">
-                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-outline-secondary" type="button" id="filterCategory" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-filter py-2 px-1"></i>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Female</a></li>
-                        <li><a class="dropdown-item" href="#">Male</a></li>
+                        <li><a class="dropdown-item" data-category="All" style="cursor: pointer;">All</a></li>
+                        <li><a class="dropdown-item" data-category="Female" style="cursor: pointer;">Female</a></li>
+                        <li><a class="dropdown-item" data-category="Male" style="cursor: pointer;">Male</a></li>
                     </ul>
                 </div>
             </div>
+            <div class="col-lg-3 col-sm-12 mt-3 mt-lg-0">
+                <a type="button" class="btn btn-primary w-100 py-2 text-white" style="background-color: #03367E;" asp-controller="Bootcampers" asp-action="Create">
+                    <i class="fa-solid fa-plus"></i> <span class="ms-2">ADD BOOTCAMPER</span>
+                </a>
+            </div>
         </div>
 
-       <div class="table-responsive">
+         <div class="table-responsive">
            <table class="table table-striped-columns">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>
-                            Name
-                            <i id="sortNameAsc" class="fa-solid fa-arrow-up-a-z" style="cursor: pointer;"></i>
-                            <i id="sortNameDesc" class="fa-solid fa-down-up-a-z" style="cursor: pointer; display: none"></i>
+                        <th class="sortable-header">         
+                             Name
+                            <i id="sortNameAsc" class="fa-solid fa-arrow-up-z-a" style="cursor: pointer;"></i>
+                            <i id="sortNameDesc" class="fa-solid fa-arrow-down-z-a" style="cursor: pointer; display: none;"></i>
                         </th>
                         <th>Age</th>
                         <th>Birthday</th>
@@ -67,26 +67,103 @@
                     </tr>
                 </thead>
                 <tbody id="table">
-                    @foreach (var bootcamper in Model)
-                    {
-                        <tr>
-                            <td>@bootcamper.Id</td>
-                            <td>@bootcamper.Name</td>
-                            <td>@bootcamper.Age</td>
-                            <td>@bootcamper.Birthday.ToString("MM/dd/yyyy")</td>
-                            <td>@bootcamper.Age</td>
-                            <td>@bootcamper.Address</td>
-                            <td>@(bootcamper.Phone)</td>
-                            <td><img src="/profiles/@bootcamper.ImageFileName" width="80" /></td>
-                            <td>@bootcamper.CreatedAt.ToString("MM/dd/yyyy")</td>
-                            <td style="white-space:nowrap">
-                                <a class="btn btn-success btn-sm" asp-controller="Products" asp-action="Edit" asp-route-id="@bootcamper.Id"><i class="fa-solid fa-pencil py-1"></i></a>
-                                <a class="btn btn-danger btn-sm" asp-controller="Products" asp-action="Delete" asp-route-id="@bootcamper.Id"><i class="fa-solid fa-trash py-1"></i></a>
-                            </td>
-                        </tr>
-                    }
+                    @await Html.PartialAsync("Shared/_BootcamperList", Model)
                 </tbody>
             </table>
         </div>
     </div>
+
+      
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; top: 1rem; right: 1rem; z-index: 1050;">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; top: 1rem; right: 1rem; z-index: 1050;">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('search');
+            const tableBody = document.getElementById('table');
+            const filterButton = document.getElementById('filterCategory');
+            const filterItems = document.querySelectorAll('.dropdown-item');
+            const sortNameAsc = document.getElementById('sortNameAsc');
+            const sortNameDesc = document.getElementById('sortNameDesc');
+
+            let selectedCategory = "All";
+            let sortOrder = '';
+            let debounceTimer;
+
+            function updateTable() {
+                const query = searchInput.value;
+                const category = selectedCategory;
+                const sort = sortOrder;
+
+                fetch(`/Bootcampers/Update?query=${encodeURIComponent(query)}&gender=${encodeURIComponent(category)}&sort=${encodeURIComponent(sort)}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        tableBody.innerHTML = data;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        tableBody.innerHTML = '<tr><td colspan="8" class="text-center">An error occurred while fetching data.</td></tr>';
+                    });
+            }
+
+            function updateSortIcons(order = 'asc') {
+                if (order === 'asc') {
+                    sortNameAsc.style.display = 'none';
+                    sortNameDesc.style.display = 'inline';
+                } else if (order === 'desc') {
+                    sortNameAsc.style.display = 'inline';
+                    sortNameDesc.style.display = 'none';
+                } else {
+                    sortNameAsc.style.display = 'none';
+                    sortNameDesc.style.display = 'none';
+                }
+            }
+
+            searchInput.addEventListener('input', function () {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(function () {
+                    updateTable();
+                }, 300);
+            });
+
+            filterItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    selectedCategory = this.dataset.category;
+                    filterButton.innerHTML = `<i class="fas fa-filter"></i> ${this.textContent.trim()}`;
+                    updateTable();
+                });
+            });
+
+            sortNameAsc.addEventListener('click', function () {
+                sortOrder = 'asc';
+                updateSortIcons(sortOrder);
+                updateTable();
+            });
+
+            sortNameDesc.addEventListener('click', function () {
+                sortOrder = 'desc';
+                updateSortIcons(sortOrder);
+                updateTable();
+            });
+
+            updateTable();
+        });
+    </script>
+}

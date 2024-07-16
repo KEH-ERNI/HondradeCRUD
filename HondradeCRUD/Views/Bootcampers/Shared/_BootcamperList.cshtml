@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Bootcamper>
+
+@if (!Model.Any())
+{
+    <tr>
+        <td colspan="8" class="text-center">No current data.</td>
+    </tr>
+}
+else
+{
+    @foreach (var bootcamper in Model)
+    {
+        <tr>
+            <td>@bootcamper.Id</td>
+            <td>@bootcamper.Name</td>
+            <td>@bootcamper.Age</td>
+            <td>@bootcamper.Birthday.ToString("MM/dd/yyyy")</td>
+            <td>@bootcamper.Gender</td>
+            <td>@bootcamper.Address</td>
+            <td>@(bootcamper.Phone)</td>
+            <td><img src="/profiles/@bootcamper.ImageFileName" width="80" /></td>
+            <td>@bootcamper.CreatedAt.ToString("MM/dd/yyyy")</td>
+            <td style="white-space:nowrap">
+                <a class="btn btn-success btn-sm" asp-controller="Bootcampers" asp-action="Edit" asp-route-id="@bootcamper.Id"><i class="fa-solid fa-pencil py-1"></i></a>
+                <a class="btn btn-danger btn-sm" asp-controller="Bootcampers" asp-action="Delete" asp-route-id="@bootcamper.Id"><i class="fa-solid fa-trash py-1"></i></a>
+            </td>
+        </tr>
+    }
+}
