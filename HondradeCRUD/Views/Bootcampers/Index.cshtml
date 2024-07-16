@@ -1,0 +1,92 @@
+﻿@model List<Bootcamper>
+@{
+}
+
+<div class="row gap-3 p-0 m-0 ">
+     <div class="p-0 m-0 row" style="background-color: #EDEDF0; border-bottom: 1px solid #ECECEE">
+        <div class="row align-items-center py-5 px-5 gap-4">
+            <div class="text-left row col-8 p-0">
+              <h1 style="color: #233770; font-weight: bold">BOOTCAMP TRAINEES</h1>
+              <div>Meet the learners in ERNIAcademy.</div>
+          </div>
+           <div class="col-4">
+              <img src="~/images/logo.png" width="70"/>
+          </div>
+        </div>
+    </div
+
+    <div></div>
+
+    <div class="container p-3">
+        <div class="mb-3 ">
+            <button type="button" class="btn w-100 py-2 text-white" style="background-color: #03367E" asp-controller="Bootcampers" asp-action="Create">
+                <i class="fa-solid fa-plus"></i> <span>ADD BOOTCAMPER</span>
+            </button>
+        </div>
+
+        <div class="row px-0 gap-0 container col-12 align-items-center justify-content-center mb-3">
+            <div class="col-10">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text p-3"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="search" placeholder="Search by name..." />
+                </div>
+            </div>
+            <div class="col-2 align-content-center">
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-filter py-2 px-1"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Female</a></li>
+                        <li><a class="dropdown-item" href="#">Male</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+       <div class="table-responsive">
+           <table class="table table-striped-columns">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>
+                            Name
+                            <i id="sortNameAsc" class="fa-solid fa-arrow-up-a-z" style="cursor: pointer;"></i>
+                            <i id="sortNameDesc" class="fa-solid fa-down-up-a-z" style="cursor: pointer; display: none"></i>
+                        </th>
+                        <th>Age</th>
+                        <th>Birthday</th>
+                        <th>Gender</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <th class="text-center">Image</th>
+                        <th>Created</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="table">
+                    @foreach (var bootcamper in Model)
+                    {
+                        <tr>
+                            <td>@bootcamper.Id</td>
+                            <td>@bootcamper.Name</td>
+                            <td>@bootcamper.Age</td>
+                            <td>@bootcamper.Birthday.ToString("MM/dd/yyyy")</td>
+                            <td>@bootcamper.Age</td>
+                            <td>@bootcamper.Address</td>
+                            <td>@(bootcamper.Phone)</td>
+                            <td><img src="/profiles/@bootcamper.ImageFileName" width="80" /></td>
+                            <td>@bootcamper.CreatedAt.ToString("MM/dd/yyyy")</td>
+                            <td style="white-space:nowrap">
+                                <a class="btn btn-success btn-sm" asp-controller="Products" asp-action="Edit" asp-route-id="@bootcamper.Id"><i class="fa-solid fa-pencil py-1"></i></a>
+                                <a class="btn btn-danger btn-sm" asp-controller="Products" asp-action="Delete" asp-route-id="@bootcamper.Id"><i class="fa-solid fa-trash py-1"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
