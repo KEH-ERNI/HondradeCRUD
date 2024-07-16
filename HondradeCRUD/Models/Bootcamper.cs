@@ -26,5 +26,8 @@ namespace HondradeCRUD.Models
         public string Address { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
+        [MaxLength(10)]
+        public string Gender { get; set; }
     }
 }
